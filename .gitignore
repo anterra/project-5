@@ -3,3 +3,4 @@ all_yoga_classes_df
 flask_app_df
 poses_df
 .vscode
+.ipynb_checkpoints

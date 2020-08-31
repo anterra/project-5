@@ -6,7 +6,7 @@
 
 ## Proposal:
 
-I propose the invention of a data-driven yoga application which creates safe, completely unique, and compelling yoga classes which can be taken at the click of a button.
+I propose the invention of a data-driven yoga application which creates safe, completely unique, and compelling yoga classes which can be taken at the click of a button. Especially given COVID-19, it will benefit people stuck at home greatly to have new yoga classes to take any time.
 
 ### Background
 
@@ -45,6 +45,7 @@ Use a bi-directional LSTM neural network to generate yoga classes.
 ## Technologies Used (Anticipated):
 
 - Bi-Directional LSTM
+- Wolfram Client Library
 - Tensorflow/Keras
 - GCP
 - SQL
@@ -62,3 +63,4 @@ Use a bi-directional LSTM neural network to generate yoga classes.
 - Neural Networks
 - Unsupvised Machine Learning
 - Web Scraping
+- Word Embeddings
