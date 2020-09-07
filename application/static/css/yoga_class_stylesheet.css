@@ -24,14 +24,9 @@ body {
 }
 
 h1 {
-  color: var(--maroon-x-11);
+  color: var(--aero-blue);
 }
 
 h2 {
-  color: var(--blush);
-}
-
-.bar-graph {
-  background-color: var(--dark-sienna);
-  color: var(--champagne-pink);
+  color: var(--mauve-taupe);
 }
