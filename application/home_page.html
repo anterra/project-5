@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Vinyasa Krama</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
+    <link rel="stylesheet" href="static/css/home_stylesheet.css" />
+  </head>
+
+  <body class="mb4">
+    <h1 class="tc f1 lh-copy">Vinyasa Krama</h1>
+    <h2 class="tc f2 lh-copy">Deep Learning Generated Yoga Classes</h2>
+    <h3 class="tc f2 lh-copy">Take A Class: </h3>
+
+    <form method="POST" action="/predict">
+      you're about to take the sickest class everrrrr
+      <div class="mb4">
+        <h1 class="ph3 mb1">{{ p }}</h1>
+        <div class="flex w-100 ph3">
+          {% for key, value in all_poses[p].items() %}
+          <div class="w-30 pr3">
+            <label class="db f5 lh-copy" for="{{ p }}-{{ key }}">
+              {{ key }}
+            </label>
+
+            <select class="w-100" name="{{ p }}-{{ key }}" id="{{ p }}-{{ key }}">
+              <option value=""></option>
+              {% for pose in value %}
+              <option value="{{ pose | replace(" ", "-") }}">
+                {{ pose }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+
+      <input type="submit" value="What's my class?" method="get" />
+    </form>
+  </body>
+</html>
