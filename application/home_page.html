@@ -11,10 +11,9 @@
   <body class="mb4">
     <h1 class="tc f1 lh-copy">Vinyasa Krama</h1>
     <h2 class="tc f2 lh-copy">Deep Learning Generated Yoga Classes</h2>
-    <h3 class="tc f2 lh-copy">Take A Class: </h3>
 
     <form method="POST" action="/predict">
-      you're about to take the sickest class everrrrr
+      <h4 class="tc f3 lh-copy">Select A Peak Pose:</h3>
       <div class="mb4">
         <h1 class="ph3 mb1">{{ p }}</h1>
         <div class="flex w-100 ph3">
@@ -27,7 +26,7 @@
             <select class="w-100" name="{{ p }}-{{ key }}" id="{{ p }}-{{ key }}">
               <option value=""></option>
               {% for pose in value %}
-              <option value="{{ pose | replace(" ", "-") }}">
+              <option value="{{ pose }}">
                 {{ pose }}
               </option>
               {% endfor %}

@@ -1,6 +1,6 @@
 import flask
 from flask import request
-from predictor_api import get_class_info, get_class, make_prediction, feature_names, all_poses
+from yoga_api import get_class_info, get_class, make_prediction, feature_names, all_poses
 
 # initialize the app
 app = flask.Flask(__name__)

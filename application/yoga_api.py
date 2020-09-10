@@ -1,24 +1,8 @@
 import pickle
 import numpy as np
 import pandas as pd
-
-# load in final model
-f = open("final_model", "rb")
-model = pickle.load(f)
-f.close()
-
-# load in DataFrame of pose stats for making prediction on
-f = open("flask_app_df", "rb")
-df = pickle.load(f)
-f.close()
-
-# load in yoga poses for user to select from
-f = open("all_poses", "rb")
-all_poses = pickle.load(f)
-f.close()
-
-
-feature_names = model.feature_names
+import keras
+from keras import Model
 
 
 def get_class(pose_dict):
@@ -30,12 +14,6 @@ def get_class(pose_dict):
 
 
 def get_class_info(pose_dict):
-    """ This function takes user input of selected poses for their yoga class, 
-    gets diagnostic information about each pose, sums them to find total counts of
-    each type of pose in a class, divides counts by the length of the user's class to get
-    ratios (from 0 to 1) of how much of the class is spent in each type of pose, and returns
-    a dictionary of the form {pose type: ratio} which a classification prediction
-    can be made on. """
 
     list_of_inputs = list(pose_dict.values())
     list_of_inputs = [pose.replace("-", " ") for pose in list_of_inputs]
