@@ -1,33 +1,33 @@
 import flask
 from flask import request
-from yoga_api import get_class_info, get_class, make_prediction, feature_names, all_poses
+from yoga_api import peak_poses, forward_model, backward_model, embeddings, tokenizer, tokenizer2, generate_class, get_peak_pose
 
 # initialize the app
 app = flask.Flask(__name__)
 
 
 @app.route("/")
-def build_yoga_class():
-    return flask.render_template("predictor.html",
-                                 feature_names=feature_names,
-                                 all_poses=all_poses)
+def create_yoga_class():
+    return flask.render_template("home_page.html",
+                                 peak_poses=peak_poses)
 
 
-@app.route("/predict", methods=["POST", "GET"])
+@app.route("/take_class", methods=["POST", "GET"])
 def predict():
 
-    class_info = get_class_info(request.form)
-    yoga_class = get_class(request.form)
+    peak_pose = get_peak_pose(request.form)
+    first_half = generate_class(
+        backward_model, tokenizer2, embeddings, peak_pose, 40)
+    second_half = generate_class(
+        forward_model, tokenizer, embeddings, peak_pose, 40)[::-1]
+    yoga_class = first_half + second_half
 
-    x_input, predictions = make_prediction(class_info)
     if request.method == 'POST':
         result = yoga_class
-        result2 = class_info
-        return flask.render_template("results.html",
+        return flask.render_template("yoga_class_page.html",
                                      result=result,
-                                     result2=result2,
-                                     prediction=predictions,
-                                     x_input=x_input)
+                                     peak_pose=peak_pose,
+                                     )
 
 
 # start the server, continuously listen to requests

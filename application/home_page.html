@@ -12,32 +12,21 @@
     <h1 class="tc f1 lh-copy">Vinyasa Krama</h1>
     <h2 class="tc f2 lh-copy">Deep Learning Generated Yoga Classes</h2>
 
-    <form method="POST" action="/predict">
+    <form method="POST" action="/take_class">
       <h4 class="tc f3 lh-copy">Select A Peak Pose:</h3>
       <div class="mb4">
-        <h1 class="ph3 mb1">{{ p }}</h1>
-        <div class="flex w-100 ph3">
-          {% for key, value in all_poses[p].items() %}
-          <div class="w-30 pr3">
-            <label class="db f5 lh-copy" for="{{ p }}-{{ key }}">
-              {{ key }}
-            </label>
-
-            <select class="w-100" name="{{ p }}-{{ key }}" id="{{ p }}-{{ key }}">
-              <option value=""></option>
-              {% for pose in value %}
-              <option value="{{ pose }}">
-                {{ pose }}
-              </option>
-              {% endfor %}
-            </select>
-          </div>
+        <select class="w-100" name="{{ p }}-{{ key }}" id="{{ p }}-{{ key }}">
+          <option value=""></option>
+          {% for pose in peak_poses %}
+          <option value="{{ pose }}">
+            {{ pose }}
+          </option>
           {% endfor %}
-        </div>
+        </select>
       </div>
       {% endfor %}
 
-      <input type="submit" value="What's my class?" method="get" />
+      <input type="submit" value="Generate A Class" method="get" />
     </form>
   </body>
 </html>

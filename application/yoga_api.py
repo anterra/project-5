@@ -2,66 +2,80 @@ import pickle
 import numpy as np
 import pandas as pd
 import keras
+import tensorflow as tf
 from keras import Model
+from tensorflow.keras.models import load_model
 
 
-def get_class(pose_dict):
-    """ Creates list of pose names from the pose drop-downs the user selected. """
-    list_of_inputs = list(pose_dict.values())
-    list_of_inputs = [pose.replace("-", " ") for pose in list_of_inputs]
-    list_of_poses = [i for i in list_of_inputs if i != '']
-    return list_of_poses
+f = open("word_embeddings.pkl", "rb")
+embeddings = pickle.load(f)
+f.close()
+
+f = open("tokenizer.pkl", "rb")
+tokenizer = pickle.load(f)
+f.close()
+
+f = open("tokenizer2.pkl", "rb")
+tokenizer2 = pickle.load(f)
+f.close()
+
+f = open("peak_poses.pkl", "rb")
+peak_poses = pickle.load(f)
+f.close()
+
+forward_model = load_model("forward_model.h5")
+backward_model = load_model("backward_model.h5")
 
 
-def get_class_info(pose_dict):
-
-    list_of_inputs = list(pose_dict.values())
-    list_of_inputs = [pose.replace("-", " ") for pose in list_of_inputs]
-    list_of_poses = [i for i in list_of_inputs if i != '']
-
-    if list_of_poses:
-        class_df = df.loc[df["Pose Name"] == list_of_poses[0]]
-        for pose in list_of_poses[1:]:
-            row = df.loc[df["Pose Name"] == pose]
-            class_df = pd.concat([class_df, row])
-
-        class_length = len(class_df)
-        class_df = class_df.iloc[:, 3:]
-        counts = class_df.sum(axis=0)
-        ratios = counts / class_length
-        ratios["Class Length"] = class_length
-
-        return dict(ratios)
+def get_peak_pose(user_selection):
+    peak_pose = user_selection
+    return peak_pose
 
 
-def make_prediction(feature_dict):
-    x_input = []
-    for name in model.feature_names:
-        x_input_ = float(feature_dict.get(name, 0))
-        x_input.append(x_input_)
+def generate_class(model, tokenizer, word_embedding, peak_pose, max_length):
+    # generate seed text of 3 poses (as LSTM was trained on) from the input desired peak pose, by randomly selecting two of the most similar poses to the peak.
+    seed_text = [peak_pose, embeddings.most_similar(peak_pose, topn=10)[np.random.choice(
+        range(10))][0], embeddings.most_similar(peak_pose, topn=10)[np.random.choice(range(10))][0]]
+    in_text = seed_text
 
-    pred_probs = model.predict_proba([x_input]).flat
+    # create yoga class, and make sure it includes the user's desired peak pose
+    yoga_class = list()
+    yoga_class.append(peak_pose.lower())
 
-    probs = []
-    for index in np.argsort(pred_probs)[::-1]:
-        prob = {
-            "name": model.target_names[index],
-            "prob": round(pred_probs[index], 5)
-        }
-        probs.append(prob)
+    while True:
+        encoded = tokenizer.texts_to_sequences([in_text])
 
-    return x_input, probs
+        # select next pose based on models probability distribution
+        prediction_output = (model.predict(encoded))
+        yhat = np.random.choice(
+            len(prediction_output[0]), p=prediction_output[0])
+
+        out_word = ""
+        for word, index in tokenizer.word_index.items():
+            if index == yhat:
+                out_word = word
+                break
+
+        # append pose to current class, and update input text
+        # also add clarification text for user to repeat the pose on the other side (if its an imbalanced pose) if given two of the same pose in a row
+        if out_word != "":
+            if out_word == yoga_class[-1]:
+                in_text.append(out_word)
+                out_word += ", repeat other side"
+                yoga_class.append(out_word)
+            else:
+                yoga_class.append(out_word)
+                in_text.append(out_word)
+        if out_word in ["--", "corpse pose"]:
+            break
+
+        # if sequence gets too long without converging to a natural ending, start over.
+        if len(yoga_class) == max_length:
+            in_text = seed_text
+            yoga_class = [peak_pose.lower()]
+    return yoga_class
 
 
-# checks that prediction code runs properly from terminal
+# check that code runs properly from terminal
 if __name__ == "__main__":
     from pprint import pprint
-    print("Checking to see what setting all params to 0 predicts")
-    features = {f: "0" for f in feature_names}
-    print("Features are")
-    pprint(features)
-
-    x_input, probs = make_prediction(features)
-    print(f"Input values: {x_input}")
-    print("Output probabilities")
-    pprint(probs)
