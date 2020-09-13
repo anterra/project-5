@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Vinyasa Krama</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"
+    />
+    <link rel="stylesheet" href="static/css/home_stylesheet.css" />
+  </head>
+
+  <body class="mb4">
+    <h1 class="tc f1 lh-copy">Vinyasa Krama</h1>
+    <h2 class="tc f2 lh-copy">Deep Learning Generated Yoga Classes</h2>
+
+    <form method="POST" action="/take_class">
+      <h4 class="tc f3 lh-copy">Select A Peak Pose:</h4>
+      <div class="mb4">
+        <select class="w-100" name="selector" id="selector">
+          <option value=""></option>
+          {% for pose in peak_poses %}
+          <option value="{{ pose }}">{{ pose }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <input type="submit" value="Generate A Class" method="get" />
+    </form>
+  </body>
+</html>

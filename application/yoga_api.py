@@ -7,24 +7,24 @@ from keras import Model
 from tensorflow.keras.models import load_model
 
 
-f = open("word_embeddings.pkl", "rb")
+f = open("../word_embeddings.pkl", "rb")
 embeddings = pickle.load(f)
 f.close()
 
-f = open("tokenizer.pkl", "rb")
+f = open("../tokenizer.pkl", "rb")
 tokenizer = pickle.load(f)
 f.close()
 
-f = open("tokenizer2.pkl", "rb")
+f = open("../tokenizer2.pkl", "rb")
 tokenizer2 = pickle.load(f)
 f.close()
 
-f = open("peak_poses.pkl", "rb")
+f = open("../peak_poses.pkl", "rb")
 peak_poses = pickle.load(f)
 f.close()
 
-forward_model = load_model("forward_model.h5")
-backward_model = load_model("backward_model.h5")
+forward_model = load_model("../forward_model.h5")
+backward_model = load_model("../backward_model.h5")
 
 
 def get_peak_pose(user_selection):

@@ -13,8 +13,7 @@ def create_yoga_class():
 
 
 @app.route("/take_class", methods=["POST", "GET"])
-def predict():
-
+def take_class():
     peak_pose = get_peak_pose(request.form)
     first_half = generate_class(
         backward_model, tokenizer2, embeddings, peak_pose, 40)
@@ -29,8 +28,6 @@ def predict():
                                      peak_pose=peak_pose,
                                      )
 
-
-# start the server, continuously listen to requests
 
 # for local development:
 if __name__ == "__main__":
