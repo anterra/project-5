@@ -5,52 +5,13 @@
     href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css" href= />
     <link rel="stylesheet" href="static/css/yoga_class_stylesheet.css" />
   </head>
-  <body>
-    <h1 class="tc f1 lh-copy">Your Yoga Class</h1>
-
-    <h2 class="tc f3 lh-copy">Enjoy :)</h2>
-    <div class="mw7 center ph3 pv3">
-      place holder baybeee
-      <div class="flex flex-wrap items-center w-100 mb1">
-        <p class="mv0 w-20 b f4 lh-copy">{{ p['name'] }}</p>
-        <div class="db w-80">
-          <span
-            class="dib bar-graph pv1 pl2 pr4"
-            style="width: calc({{ '%0.2f' | format( 100 * p['prob'] | float) }}% * 2)"
-            >{{ '%0.2f' | format( 100 * p['prob'] | float) }}%</span
-          >
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-
-    <div class="flex flex-wrap mw7 justify-between center">
-      <div>
-        <h2 class="tc f3 lh-copy">Your Class Poses:</h2>
-        <table class="collapse ba br2 b--black-10 pv2 ph3" border="1">
-          {% for value in result %}
-          <tr class="striped--near-white tl">
-            <td class="pv2 ph3">{{ value | replace("-", " ") }}</td>
-          </tr>
-          {% endfor %}
-        </table>
-      </div>
-
-      <div>
-        <h2 class="tc f3 lh-copy">
-          This will be a box with a video of your class:
-        </h2>
-        <table class="collapse ba br2 b--black-10 pv2 ph3" border="1">
-          {% for key, value in result2.items() %}
-          <tr class="striped--near-white tl">
-            <th class="pv2 ph3">{{ key }}</th>
-            <td class="pv2 ph3">
-              {{ '%0.2f' | format( 100 * value | float) }}
-            </td>
-          </tr>
-          {% endfor %}
-        </table>
-      </div>
+  <body class="avenir">
+    <h1 class="tc f1 lh-copy fw3">Take Your Yoga Class</h1>
+    <div class="mw8 center">
+      <video controls class="w-100 h-auto">
+        <source src="/static/video/yoga-class.mp4" type="video/mp4" />
+        Sorry, your browser doesn't support embedded videos.
+      </video>
     </div>
   </body>
 </html>

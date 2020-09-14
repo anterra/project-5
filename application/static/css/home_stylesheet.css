@@ -42,3 +42,12 @@ h3 {
 body {
   color: var(--blue-bell);
 }
+
+.logo {
+  transform: rotate(-69deg);
+}
+
+.input-reset {
+  background-color: transparent;
+  border-color: inherit;
+}

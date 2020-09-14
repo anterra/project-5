@@ -1,6 +1,6 @@
 import flask
 from flask import request
-from yoga_api import peak_poses, forward_model, backward_model, embeddings, tokenizer, tokenizer2, generate_class, get_peak_pose
+from yoga_api import peak_poses, lstm_model, embeddings, tokenizer, tokenizer2, generate_class, get_peak_pose, peak_pose_dict
 
 # initialize the app
 app = flask.Flask(__name__)
@@ -9,24 +9,30 @@ app = flask.Flask(__name__)
 @app.route("/")
 def create_yoga_class():
     return flask.render_template("home_page.html",
-                                 peak_poses=peak_poses)
+                                 peak_poses=peak_poses,
+                                 peak_pose_dict=peak_pose_dict)
 
 
-@app.route("/take_class", methods=["POST", "GET"])
-def take_class():
+@app.route("/print_class", methods=["POST", "GET"])
+def print_class_sequence():
     peak_pose = get_peak_pose(request.form)
     first_half = generate_class(
-        backward_model, tokenizer2, embeddings, peak_pose, 40)
+        lstm_model, tokenizer, embeddings, peak_pose, "easy pose", 40)[::-1]
     second_half = generate_class(
-        forward_model, tokenizer, embeddings, peak_pose, 40)[::-1]
+        lstm_model, tokenizer, embeddings, peak_pose, "corpse pose", 40)
     yoga_class = first_half + second_half
 
     if request.method == 'POST':
         result = yoga_class
-        return flask.render_template("yoga_class_page.html",
+        return flask.render_template("print_class.html",
                                      result=result,
                                      peak_pose=peak_pose,
                                      )
+
+
+@app.route("/take_class", methods=["POST", "GET"])
+def take_class():
+    return flask.render_template("yoga_class_page.html")
 
 
 # for local development:

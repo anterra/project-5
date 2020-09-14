@@ -23,16 +23,20 @@ f = open("../peak_poses.pkl", "rb")
 peak_poses = pickle.load(f)
 f.close()
 
-forward_model = load_model("../forward_model.h5")
-backward_model = load_model("../backward_model.h5")
+f = open("../peak_pose_dict.pkl", "rb")
+peak_pose_dict = pickle.load(f)
+f.close()
+
+lstm_model = load_model("../lstm_model.h5")
 
 
 def get_peak_pose(user_selection):
-    peak_pose = user_selection
-    return peak_pose
+    fields = list(user_selection.values())
+    peak_pose = [i for i in fields if i != '']
+    return peak_pose[0]
 
 
-def generate_class(model, tokenizer, word_embedding, peak_pose, max_length):
+def generate_class(model, tokenizer, word_embedding, peak_pose, stop_word, max_length):
     # generate seed text of 3 poses (as LSTM was trained on) from the input desired peak pose, by randomly selecting two of the most similar poses to the peak.
     seed_text = [peak_pose, embeddings.most_similar(peak_pose, topn=10)[np.random.choice(
         range(10))][0], embeddings.most_similar(peak_pose, topn=10)[np.random.choice(range(10))][0]]
@@ -66,13 +70,16 @@ def generate_class(model, tokenizer, word_embedding, peak_pose, max_length):
             else:
                 yoga_class.append(out_word)
                 in_text.append(out_word)
-        if out_word in ["--", "corpse pose"]:
+        if out_word == stop_word:
             break
 
         # if sequence gets too long without converging to a natural ending, start over.
         if len(yoga_class) == max_length:
             in_text = seed_text
             yoga_class = [peak_pose.lower()]
+
+    yoga_class = [i.title() for i in yoga_class]
+
     return yoga_class
 
 
