@@ -19,12 +19,14 @@
 }
 
 body {
-  background-color: var(--blue-bell);
-  background-size: 1000px;
+  /* background-color: var(--blue-bell); */
+  background-image: url(/static/img/bokeh.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 h1 {
-  color: var(--aero-blue);
+  color: var(--maroon-x-11);
 }
 
 h2 {

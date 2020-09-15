@@ -20,11 +20,11 @@
 }
 
 body {
-  background-color: var(--alabaster);
+  /* background-color: var(--alabaster); */
   font-style: var(--dark-sienna);
-  /* background-image: url(/static/img/background-picture.jpg); */
-  /* background-repeat: no-repeat; */
-  /* background-size: cover; */
+  background-image: url(/static/img/bokeh.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 h1 {
