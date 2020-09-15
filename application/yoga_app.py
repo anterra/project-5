@@ -1,6 +1,7 @@
 import flask
 from flask import request
-from yoga_api import peak_poses, lstm_model, embeddings, tokenizer, tokenizer2, generate_class, get_peak_pose, peak_pose_dict
+from yoga_api import peak_poses, lstm_model, model, embeddings, tokenizer, get_peak_pose, peak_pose_dict
+from generate_class import generate_class
 
 # initialize the app
 app = flask.Flask(__name__)
@@ -17,9 +18,9 @@ def create_yoga_class():
 def print_class_sequence():
     peak_pose = get_peak_pose(request.form)
     first_half = generate_class(
-        lstm_model, tokenizer, embeddings, peak_pose, "easy pose", 40)[::-1]
+        model, tokenizer, embeddings, peak_pose, "easy pose", 40)[::-1]
     second_half = generate_class(
-        lstm_model, tokenizer, embeddings, peak_pose, "corpse pose", 40)
+        model, tokenizer, embeddings, peak_pose, "corpse pose", 40)
     yoga_class = first_half + second_half
 
     if request.method == 'POST':
